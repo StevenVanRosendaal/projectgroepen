@@ -19,8 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'email'
     ];
 
     /**
@@ -29,7 +28,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -39,7 +37,26 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'email_verified_at' => 'datetime'
     ];
+
+    /**
+     * Sets incrementing to false for AMOClient compatibility.
+     */
+    public $incrementing = false;
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'student_group', 'student_id', 'group_id');
+    }
+
+    public function schoolClass()
+    {
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
+
+    public function schoolClasses()
+    {
+        return $this->belongsToMany(SchoolClass::class, 'teacher_class', 'teacher_id', 'class_id');
+    }
 }

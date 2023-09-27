@@ -20,6 +20,10 @@ return new class extends Migration
         Schema::table('projects', function (Blueprint $table) {
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
+        });
     }
 
     /**

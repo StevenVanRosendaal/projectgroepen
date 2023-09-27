@@ -8,7 +8,10 @@ use App\Models\Group;
 use App\Models\Project;
 use App\Models\SchoolClass;
 use App\Models\Student;
+use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class DatabaseSeeder extends Seeder
@@ -18,18 +21,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
+        $faker = Faker::create();
         $classes = SchoolClass::factory(5)->create();
 
         foreach($classes as $class) {
 
-            $students = Student::factory(20)->create([
+            $teacher = User::factory()->create([
+                'id' => $faker->unique()->regexify('[a-z]{2}[0-9]{2}'),
+                'type' => 'teacher',
+            ])->schoolClasses()->attach($class);
+
+            $students = User::factory(20)->create([
+                'type' => 'student',
                 'class_id' => $class->id,
             ]);
 
